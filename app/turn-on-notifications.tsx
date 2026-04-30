@@ -1,6 +1,41 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
+import { ThemedView } from '@/components/themed-view';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedButton } from '@/components/themed-button';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 24,
+    paddingTop: 48,
+  },
+  title: {
+    marginBottom: 8,
+  },
+  subtitle: {
+    marginBottom: 32,
+    lineHeight: 22,
+  },
+  button: {
+    marginTop: 16,
+  },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
+  linkButton: {
+    alignItems: 'center',
+    padding: 16,
+    marginTop: 16,
+  },
+  linkText: {
+    textDecorationLine: 'underline',
+  },
+});
 
 export default function TurnOnNotifications() {
   const [isLoading, setIsLoading] = useState(false);
@@ -25,92 +60,42 @@ export default function TurnOnNotifications() {
   };
 
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       <Stack.Screen
         options={{
           title: 'Turn on Notifications',
           headerLeft: () => (
-            <Pressable onPress={() => router.back()}>
-              <Text style={styles.backButton}>Back</Text>
-            </Pressable>
+            <ThemedText type="link" onPress={() => router.back()}>
+              Back
+            </ThemedText>
           ),
         }}
       />
 
-      <View style={styles.content}>
-        <Text style={styles.title}>Turn on notifications</Text>
-        <Text style={styles.subtitle}>
+      <ThemedView style={styles.content}>
+        <ThemedText type="title" style={styles.title}>
+          Turn on notifications
+        </ThemedText>
+        <ThemedText style={styles.subtitle}>
           Enable push notifications to get the latest updates and activity alerts.
-        </Text>
+        </ThemedText>
 
-        <Pressable
+        <ThemedButton
           style={[styles.button, isLoading && styles.buttonDisabled]}
           onPress={handleContinue}
           disabled={isLoading}
+          lightColor="#000"
+          darkColor="#fff"
         >
-          <Text style={styles.buttonText}>
-            {isLoading ? 'Enabling...' : 'Turn on notifications'}
-          </Text>
-        </Pressable>
+          {isLoading ? 'Enabling...' : 'Turn on notifications'}
+        </ThemedButton>
 
-        <Pressable onPress={handleSkip} style={styles.linkButton}>
-          <Text style={styles.linkText}>Skip for now</Text>
-        </Pressable>
-      </View>
-    </View>
+        <ThemedButton style={styles.linkButton} onPress={handleSkip}>
+          <ThemedText type="link" style={styles.linkText}>
+            Skip for now
+          </ThemedText>
+        </ThemedButton>
+      </ThemedView>
+    </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 48,
-  },
-  backButton: {
-    fontSize: 16,
-    color: '#007AFF',
-    paddingHorizontal: 8,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: 8,
-    color: '#000',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 32,
-    lineHeight: 22,
-  },
-  button: {
-    backgroundColor: '#000',
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 16,
-  },
-  buttonDisabled: {
-    opacity: 0.6,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  linkButton: {
-    alignItems: 'center',
-    padding: 16,
-    marginTop: 16,
-  },
-  linkText: {
-    color: '#007AFF',
-    fontSize: 16,
-    textDecorationLine: 'underline',
-  },
-});

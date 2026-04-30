@@ -1,10 +1,18 @@
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
+import 'react-native-reanimated';
+import { StatusBar } from 'expo-status-bar';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { ThemedButton } from '@/components/themed-button';
 
 export default function Landing() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const colorScheme = useColorScheme();
 
   const blurActive = () => {
     if (typeof document !== 'undefined' && document.activeElement instanceof HTMLElement) {
@@ -13,62 +21,75 @@ export default function Landing() {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Stack.Screen options={{ headerShown: false }} />
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ThemedView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.content}>
+          <Stack.Screen options={{ headerShown: false }} />
 
-      <View style={styles.header}>
-        <Text style={styles.title}>Welcome to the App</Text>
-        <Text style={styles.subtitle}>
-          Simplify connecting.
-        </Text>
-      </View>
+          <ThemedView style={styles.header}>
+            <ThemedText type="title" style={styles.title}>
+              Welcome to the App
+            </ThemedText>
+            <ThemedText type="subtitle" style={styles.subtitle}>
+              Simplify connecting.
+            </ThemedText>
+          </ThemedView>
 
-      <View style={styles.main}>
-        <Text style={styles.description}>
-          By continuing, you agree to our{' '}
-          <Text style={styles.link}>Terms of Use</Text> and have read our{' '}
-          <Text style={styles.link}>Privacy Policy</Text>.
-        </Text>
+          <ThemedView style={styles.main}>
+            <ThemedText style={styles.description}>
+              By continuing, you agree to our{' '}
+              <ThemedText type="link" style={styles.link}>
+                Terms of Use
+              </ThemedText>{' '}
+              and have read our{' '}
+              <ThemedText type="link" style={styles.link}>
+                Privacy Policy
+              </ThemedText>
+              .
+            </ThemedText>
 
-        <Pressable
-          style={[styles.button, isLoading && styles.buttonDisabled]}
-          onPress={() => {
-            blurActive();
-            router.push('/enter-email');
-          }}
-          disabled={isLoading}
-        >
-          <Text style={styles.buttonText}>
-            {isLoading ? 'Loading...' : 'Continue with Email'}
-          </Text>
-        </Pressable>
-      </View>
+            <ThemedButton
+              style={[styles.button, isLoading && styles.buttonDisabled]}
+              onPress={() => {
+                blurActive();
+                router.push('/enter-email');
+              }}
+              disabled={isLoading}
+              lightColor="#000"
+              darkColor="#fff"
+            >
+              {isLoading ? 'Loading...' : 'Continue with Email'}
+            </ThemedButton>
+          </ThemedView>
 
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          Already have an account?{' '}
-          <Text
-            style={styles.link}
-            onPress={() => {
-              blurActive();
-              router.push('/enter-email');
-            }}
-          >
-            Sign in
-          </Text>
-        </Text>
-      </View>
-    </ScrollView>
+          <ThemedView style={styles.footer}>
+            <ThemedText style={styles.footerText}>
+              Already have an account?{' '}
+              <ThemedText
+                type="link"
+                style={styles.link}
+                onPress={() => {
+                  blurActive();
+                  router.push('/enter-email');
+                }}
+              >
+                Sign in
+              </ThemedText>
+            </ThemedText>
+          </ThemedView>
+        </ScrollView>
+        <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+      </ThemedView>
+    </ThemeProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   content: {
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: 24,
     paddingVertical: 48,
   },
@@ -77,16 +98,11 @@ const styles = StyleSheet.create({
     marginBottom: 48,
   },
   title: {
-    fontSize: 32,
-    fontWeight: '700',
     textAlign: 'center',
     marginBottom: 16,
-    color: '#000',
   },
   subtitle: {
-    fontSize: 18,
     textAlign: 'center',
-    color: '#666',
     lineHeight: 24,
   },
   main: {
@@ -94,37 +110,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   description: {
-    fontSize: 16,
     textAlign: 'center',
-    color: '#666',
     lineHeight: 24,
     marginBottom: 32,
   },
   link: {
-    color: '#007AFF',
     textDecorationLine: 'underline',
   },
   button: {
-    backgroundColor: '#000',
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
     marginTop: 24,
   },
   buttonDisabled: {
     opacity: 0.6,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
   },
   footer: {
     alignItems: 'center',
     paddingBottom: 24,
   },
   footerText: {
-    fontSize: 16,
-    color: '#666',
+    textAlign: 'center',
   },
 });

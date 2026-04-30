@@ -1,7 +1,66 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { TextInput } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { useAuth } from '../utils/auth';
+import { ThemedView } from '@/components/themed-view';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedButton } from '@/components/themed-button';
+import { useThemeColor } from '@/hooks/use-theme-color';
+import { StyleSheet } from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 24,
+    paddingTop: 48,
+  },
+  title: {
+    marginBottom: 8,
+  },
+  subtitle: {
+    marginBottom: 32,
+    lineHeight: 22,
+  },
+  input: {
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 16,
+    fontSize: 16,
+    marginBottom: 16,
+  },
+  inputError: {
+    borderColor: '#ff3b30',
+  },
+  errorText: {
+    color: '#ff3b30',
+    fontSize: 14,
+    marginBottom: 16,
+  },
+  button: {
+    marginTop: 16,
+  },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
+  linkButton: {
+    alignItems: 'center',
+    padding: 16,
+    marginTop: 16,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  linkText: {
+    color: '#007AFF',
+    fontSize: 16,
+    textDecorationLine: 'underline',
+  },
+});
 
 export default function EnterEmail() {
   const [email, setEmail] = useState('');
@@ -9,6 +68,8 @@ export default function EnterEmail() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { setPendingEmail } = useAuth();
+  const textColor = useThemeColor({}, 'text');
+  const iconColor = useThemeColor({}, 'icon');
 
   const blurActive = () => {
     if (typeof document !== 'undefined' && document.activeElement instanceof HTMLElement) {
@@ -42,27 +103,34 @@ export default function EnterEmail() {
   };
 
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       <Stack.Screen
         options={{
           title: 'Enter your Email',
           headerLeft: () => (
-            <Pressable onPress={() => router.back()}>
-              <Text style={styles.backButton}>Back</Text>
-            </Pressable>
+            <ThemedText type="link" onPress={() => router.back()}>
+              Back
+            </ThemedText>
           ),
         }}
       />
 
-      <View style={styles.content}>
-        <Text style={styles.title}>Enter your email</Text>
-        <Text style={styles.subtitle}>
+      <ThemedView style={styles.content}>
+        <ThemedText type="title" style={styles.title}>
+          Enter your email
+        </ThemedText>
+        <ThemedText style={styles.subtitle}>
           We'll send you a verification code to continue
-        </Text>
+        </ThemedText>
 
         <TextInput
-          style={[styles.input, error && styles.inputError]}
+          style={[
+            styles.input,
+            error && styles.inputError,
+            { color: textColor, borderColor: iconColor },
+          ]}
           placeholder="Email address"
+          placeholderTextColor={iconColor}
           keyboardType="email-address"
           autoCapitalize="none"
           autoComplete="email"
@@ -73,92 +141,20 @@ export default function EnterEmail() {
           }}
         />
 
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        {error ? (
+          <ThemedText style={styles.errorText}>{error}</ThemedText>
+        ) : null}
 
-        <Pressable
+        <ThemedButton
           style={[styles.button, isLoading && styles.buttonDisabled]}
           onPress={handleContinue}
           disabled={isLoading}
+          lightColor="#000"
+          darkColor="#fff"
         >
-          <Text style={styles.buttonText}>
-            {isLoading ? 'Sending...' : 'Continue'}
-          </Text>
-        </Pressable>
-
-        <Pressable style={styles.linkButton}>
-          <Text style={styles.linkText}>Learn about our security and privacy</Text>
-        </Pressable>
-      </View>
-    </View>
+          {isLoading ? 'Sending...' : 'Continue'}
+        </ThemedButton>
+      </ThemedView>
+    </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 48,
-  },
-  backButton: {
-    fontSize: 16,
-    color: '#007AFF',
-    paddingHorizontal: 8,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: 8,
-    color: '#000',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 32,
-    lineHeight: 22,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 12,
-    padding: 16,
-    fontSize: 16,
-    marginBottom: 16,
-  },
-  inputError: {
-    borderColor: '#ff3b30',
-  },
-  errorText: {
-    color: '#ff3b30',
-    fontSize: 14,
-    marginBottom: 16,
-  },
-  button: {
-    backgroundColor: '#000',
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 16,
-  },
-  buttonDisabled: {
-    opacity: 0.6,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  linkButton: {
-    alignItems: 'center',
-    padding: 16,
-    marginTop: 16,
-  },
-  linkText: {
-    color: '#007AFF',
-    fontSize: 16,
-    textDecorationLine: 'underline',
-  },
-});
