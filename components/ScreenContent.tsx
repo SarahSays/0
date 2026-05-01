@@ -1,6 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
+import { ThemedView } from './themed-view';
+import { ThemedText } from './themed-text';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import EditScreenInfo from './EditScreenInfo';
 
 type ScreenContentProps = {
@@ -10,31 +13,32 @@ type ScreenContentProps = {
 };
 
 export const ScreenContent = ({ title, path, children }: ScreenContentProps) => {
+  const separatorColor = useThemeColor({ light: '#d1d5db', dark: '#424245' }, 'icon');
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
-      <View style={styles.separator} />
+    <ThemedView style={styles.container}>
+      <ThemedText type="title" style={styles.title}>
+        {title}
+      </ThemedText>
+      <ThemedView style={[styles.separator, { backgroundColor: separatorColor }]} />
       <EditScreenInfo path={path} />
       {children}
-    </View>
+    </ThemedView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: 'white',
     flex: 1,
     justifyContent: 'center',
   },
   separator: {
-    backgroundColor: '#d1d5db',
     height: 1,
     marginVertical: 30,
     width: '80%',
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });

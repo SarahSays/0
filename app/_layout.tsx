@@ -19,6 +19,7 @@ function RootStack() {
   return (
     <Stack
       screenOptions={{
+        headerShown: false,
         headerStyle: {
           backgroundColor: colorScheme === 'dark' ? '#151718' : '#fff',
         },
