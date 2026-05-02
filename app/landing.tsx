@@ -28,7 +28,7 @@ export default function Landing() {
 
           <ThemedView style={styles.header}>
             <ThemedText type="title" style={styles.title}>
-              Welcome to the App
+              Orbits 💫
             </ThemedText>
             <ThemedText type="subtitle" style={styles.subtitle}>
               Simplify connecting.

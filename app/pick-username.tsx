@@ -105,7 +105,7 @@ export default function PickUsername() {
           title: 'Pick a Username',
           headerLeft: () => (
             <ThemedText type="link" onPress={() => router.back()}>
-              Back
+              ⬅️ Back
             </ThemedText>
           ),
         }}

@@ -5,7 +5,6 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { ThemedView } from '@/components/themed-view';
 import { useAuth, AuthProvider } from '../utils/auth';
 
 export const unstable_settings = {
@@ -19,11 +18,12 @@ function RootStack() {
   return (
     <Stack
       screenOptions={{
-        headerShown: false,
+        headerShown: user ? false : true,
         headerStyle: {
           backgroundColor: colorScheme === 'dark' ? '#151718' : '#fff',
         },
         headerTintColor: colorScheme === 'dark' ? '#ECEDEE' : '#11181C',
+        headerTitleAlign: 'center',
         headerTitleStyle: {
           color: colorScheme === 'dark' ? '#ECEDEE' : '#11181C',
         },
@@ -49,17 +49,15 @@ function RootStack() {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  
+
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <ThemedView style={{ flex: 1 }}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <AuthProvider>
-            <RootStack />
-          </AuthProvider>
-          <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-        </GestureHandlerRootView>
-      </ThemedView>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <AuthProvider>
+          <RootStack />
+        </AuthProvider>
+        <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+      </GestureHandlerRootView>
     </ThemeProvider>
   );
 }

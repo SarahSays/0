@@ -62,6 +62,7 @@ export default function EnterCode() {
   const { pendingEmail } = useAuth();
   const textColor = useThemeColor({}, 'text');
   const iconColor = useThemeColor({}, 'icon');
+  const { user } = useAuth();
 
   const blurActive = () => {
     if (typeof document !== 'undefined' && document.activeElement instanceof HTMLElement) {
@@ -92,10 +93,10 @@ export default function EnterCode() {
     <ThemedView style={styles.container}>
       <Stack.Screen
         options={{
-          title: 'Enter your code',
+          title: 'Enter Your Code',
           headerLeft: () => (
             <ThemedText type="link" onPress={() => router.back()}>
-              Back
+              ⬅️ Back
             </ThemedText>
           ),
         }}
@@ -106,7 +107,7 @@ export default function EnterCode() {
           Enter your code
         </ThemedText>
         <ThemedText style={styles.subtitle}>
-          Check your email for a verification code to continue.
+          Check your {user?.email ?? 'email'} for a verification code to continue.
         </ThemedText>
 
         <TextInput

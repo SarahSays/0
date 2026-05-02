@@ -106,10 +106,10 @@ export default function EnterEmail() {
     <ThemedView style={styles.container}>
       <Stack.Screen
         options={{
-          title: 'Enter your Email',
+          title: 'Enter Your Email',
           headerLeft: () => (
             <ThemedText type="link" onPress={() => router.back()}>
-              Back
+              ⬅️ Back
             </ThemedText>
           ),
         }}

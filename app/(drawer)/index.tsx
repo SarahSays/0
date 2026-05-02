@@ -22,7 +22,7 @@ export default function Home() {
       <Stack.Screen options={{ title: 'Home' }} />
       <ThemedView style={styles.topSection}>
         <ThemedText type="defaultSemiBold" style={styles.welcomeText}>
-          Welcome, {user?.username ?? user?.email ?? 'User'}!
+          Welcome to Orbits, {user?.username ?? user?.email ?? 'User'}!
         </ThemedText>
         <ThemedButton
           style={styles.signOutButton}

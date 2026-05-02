@@ -66,7 +66,7 @@ export default function TurnOnNotifications() {
           title: 'Turn on Notifications',
           headerLeft: () => (
             <ThemedText type="link" onPress={() => router.back()}>
-              Back
+              ⬅️ Back
             </ThemedText>
           ),
         }}
